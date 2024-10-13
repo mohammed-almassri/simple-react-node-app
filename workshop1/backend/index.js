@@ -58,6 +58,11 @@ const students = [
   }
 ];
 
+
+app.get('/health', async (req, res) => {
+  res.send("I am OK.");
+});
+
 app.get('/students', async (req, res) => {
   res.send(students);
 });
