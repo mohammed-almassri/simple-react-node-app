@@ -13,7 +13,8 @@ function App() {
   const [data, setData] = useState([]);
   async function getData(){
     try {
-      const res = await axios.get("http://localhost:5000/students");
+      axios.defaults.baseURL = "your-backend-base-url";
+      const res = await axios.get("/students");
       setData(res.data);
     } catch (error) {
       
