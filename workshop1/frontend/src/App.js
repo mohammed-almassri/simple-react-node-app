@@ -1,23 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
+import {useState, useEffect} from 'react';
+import axios from 'axios';
 
+function Student({data}){
+  return(
+    <div className="Student">
+      <p>{data.name} - {data.email} - {data.id}</p>
+    </div>
+  )
+}
 function App() {
+  const [data, setData] = useState([]);
+  async function getData(){
+    try {
+      const res = await axios.get("http://localhost:5000/students");
+      setData(res.data);
+    } catch (error) {
+      
+    }
+  }
+  useEffect(() => {
+    getData();
+  }, [])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {
+        data.map((item, index) => <Student data={item} key={item.id}/>)
+      }
     </div>
   );
 }
