@@ -13,7 +13,7 @@ function App() {
   const [data, setData] = useState([]);
   async function getData(){
     try {
-      axios.defaults.baseURL = "http://my-alb-459929054.us-east-1.elb.amazonaws.com";
+      axios.defaults.baseURL = "your-api-url";
       const res = await axios.get("/students");
       setData(res.data);
     } catch (error) {
