@@ -13,7 +13,7 @@ function App() {
   const [data, setData] = useState([]);
   async function getData(){
     try {
-      axios.defaults.baseURL = "your-backend-base-url";
+      axios.defaults.baseURL = "http://my-alb-459929054.us-east-1.elb.amazonaws.com";
       const res = await axios.get("/students");
       setData(res.data);
     } catch (error) {
@@ -25,6 +25,7 @@ function App() {
   }, [])
   return (
     <div className="App">
+      <h1>MIU Student List</h1>
       {
         data.map((item, index) => <Student data={item} key={item.id}/>)
       }
