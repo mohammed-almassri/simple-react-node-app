@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import "./ImageLoader.css";
 
 const ImageUploader = () => {
   const [file, setFile] = useState(null);
@@ -22,7 +23,7 @@ const ImageUploader = () => {
 
       // Send POST request to API Gateway
       const response = await axios.post(
-        'your-api-url',
+        'your-api',
         { filename, contentType, email }
       );
 
@@ -43,17 +44,18 @@ const ImageUploader = () => {
   };
 
   return (
-    <div>
+    <div class="upload-container">
       <h2>Upload Image</h2>
       <input
         type="email"
         placeholder="Enter your email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        class="input-field"
       />
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload}>Upload</button>
-      <p>{message}</p>
+      <input type="file" onChange={handleFileChange} class="file-input"/>
+      <button onClick={handleUpload} class="upload-button">Upload</button>
+      <p class="message">{message}</p>
     </div>
   );
 };
