@@ -1,72 +1,40 @@
 const express = require('express');
 const cors = require('cors');
+const { Pool } = require('pg'); // PostgreSQL client
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const students = [
-  {
-    name: "Alice",
-    email: "alice@miu.edu",
-    id: "S100"
-  },
-  {
-    name: "Bob",
-    email: "bob@miu.edu",
-    id: "S101"
-  },
-  {
-    name: "Carol",
-    email: "carol@miu.edu",
-    id: "S102"
-  },
-  {
-    name: "David",
-    email: "david@miu.edu",
-    id: "S103"
-  },
-  {
-    name: "Eve",
-    email: "eve@miu.edu",
-    id: "S104"
-  },
-  {
-    name: "Frank",
-    email: "frank@miu.edu",
-    id: "S105"
-  },
-  {
-    name: "Grace",
-    email: "grace@miu.edu",
-    id: "S106"
-  },
-  {
-    name: "Hank",
-    email: "hank@miu.edu",
-    id: "S107"
-  },
-  {
-    name: "Ivy",
-    email: "ivy@miu.edu",
-    id: "S108"
-  },
-  {
-    name: "Jack",
-    email: "jack@miu.edu",
-    id: "S109"
+// Create a connection pool for Aurora PostgreSQL
+const pool = new Pool({
+  user: 'postgres', // Replace with your Aurora DB username
+  host: 'workshop1-db.cluster-cfyeeo4ms01p.us-east-1.rds.amazonaws.com', // Replace with your Aurora endpoint
+  database: 'workshop1', // Replace with your database name
+  password: 'Aa123123$', // Replace with your Aurora DB password
+  port: 5432, // Default PostgreSQL port
+  ssl: {
+    rejectUnauthorized: false // Optional: Accept self-signed certificates
   }
-];
+});
 
-
+// Health check endpoint
 app.get('/health', async (req, res) => {
-  res.send("I am OK.");
+  res.send('I am OK.');
 });
 
+// Fetch students from the database
 app.get('/students', async (req, res) => {
-  res.send(students);
+  try {
+    // Query the database
+    const result = await pool.query('SELECT id, name, email FROM students'); // Adjust table/column names as needed
+    res.json(result.rows); // Send the retrieved rows as JSON
+  } catch (error) {
+    console.error('Error fetching students:', error);
+    res.status(500).send('Error fetching students');
+  }
 });
 
-
+// Start the server
 const port = 5000;
-app.listen(port, () => console.log(`Listening on ${port}`));
+app.listen(port, () => console.log(`Listening on port ${port}`));
